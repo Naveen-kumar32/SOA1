@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Add New Details</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.7.2/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    label {
+      font-size: 20px;
+    }
+    
+    input,
+    select {
+      height: 40px;
+      font-size: 18px;
+      padding-left:10px ;
+    }
+
+    input[type="submit"] {
+      font-size: 25px;
+      
+    }
+
+    table th {
+      font-weight: bold;
+      background-color: #f9f9f9;
+    }
+    
+
+    h1 {
+      font-size: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="margin-left: 5%;">Add New Details</h1>
+  <form style="margin: 5%;"="addform" method="POST" action="{% url 'testcase:add' %}">
+    {% csrf_token %}
+
+    <div class="row form-row">
+    <label for="id">id:</label>
+    <input type="text" id="id" name="id" value="{{ last_id }}" >
+
+    <!-- <br>
+    <label for="SlNo">SlNo:</label>
+    <input type="text" id="SlNo" value="{{ form.SlNo.value|default:''}}" name="SlNo" pattern="^[0-9]+$"
+      title="Only numbers allowed" required oninput="validateInput(this)">-->
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="Branch">Branch:</label>
+
+    <select id="Branch" name="Branch" required>
+      <option value="" disabled selected>Select Branch</option>
+      {% for option in Branch_options %}
+      <option value="{{ option }}" {% if option  ==  form.instance.Branch %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="PONo">PONo:</label>
+    <input type="text" id="PONo" value="{{ form.PONo.value|default:''}}" name="PONo" title="enter valid input" required>
+  </div>
+
+    <br>
+    <div class="row form-row">
+    <label for="POIssuedby">POIssuedby:</label>
+
+
+    <select id="POIssuedby" name="POIssuedby">
+      <option value="" disabled selected>Select POIssuedby</option>
+      {% for option in POIssuedby_options %}
+      <option value="{{ option }}" {% if option  ==  form.instance.POIssuedby %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+</div>
+    <br>
+    <div class="row form-row">
+    <label for="ClientName">ClientName:</label>
+
+    <select id="ClientName" name="ClientName">
+      <option value="" disabled selected>Select ClientName</option>
+      {% for option in ClientName_options %}
+      <option value="{{ option }}" {% if option == form.instance.ClientName %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="ClientGroup">ClientGroup:</label>
+
+    <select id="ClientGroup" name="ClientGroup">
+      <option value="" disabled selected>Select ClientGroup</option>
+      {% for option in ClientGroup_options %}
+      <option value="{{ option }}" {% if option == form.instance.ClientGroup %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="Shipname">Shipname:</label>
+
+    <select id="Shipname" name="Shipname">
+
+      <option value="" disabled selected>Select Shipname</option>
+      <option value="Not Applicable" selected>Not Applicable</option>
+      {% for option in shipname_options %}
+      <option value="{{ option }}" {% if option == form.instance.Shipname %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="POAmount">POAmount:</label>
+    <input type="text" id="POAmount" value="{{ form.POAmount.value|default:''}}" name="POAmount"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="InvoiceNo">InvoiceNo:</label>
+    <input type="text" id="InvoiceNo" value="{{ form.InvoiceNo.value|default:''}}" name="InvoiceNo"
+      pattern="^[a-zA-Z\d@#$%^&+=- ]*$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+
+    <div class="row form-row">
+    <span class="container">
+      <span class="row">
+        <label for="date" class="col-1 col-form-label">InvoiceDate</label>
+        <span class="col-5">
+          <span class="input-group">
+            <input type="text" class="form-control  dateclass" id="date" value="{{ form.InvoiceDate.value|default:''}}" name="InvoiceDate" readonly>
+          </span>
+        </span>
+      </span>
+    </span>
+  </div>
+    <br>
+    <div class="row form-row">
+    <span class="container"> 
+      <span class="row">
+        <label for="date" class="col-1 col-form-label">Duedate</label>
+        <span class="col-5">
+          <span class="input-group">
+            <input type="text" class="form-control  dateclass" id="date" value="{{ form.Duedate.value|default:''}}"
+              name="Duedate" readonly>
+          </span>
+        </span>
+      </span>
+    </span>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="Freight">Freight:</label>
+    <input type="text" id="Freight" value="{{ form.Freight.value|default:''}}" name="Freight"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="Invoiceamount">Invoiceamount:</label>
+    <input type="number" id="Invoiceamount" value="{{ form.Invoiceamount.value|default:''}}" name="Invoiceamount"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="SgdValue">SgdValue:</label>
+    <input type="text" id="SgdValue" value="{{ form.SgdValue.value|default:''}}" name="SgdValue"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="GstScope">GstScope:</label>
+    <select id="GstScope" name="GstScope">
+      <option value="" disabled selected>Select GstScope</option>
+      {% for option in GstScope_options %}
+      <option value="{{ option }}" {% if option == form.instance.GstScope %} selected {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="currency1">Currency1:</label>
+    <select id="currency1" name="currency1" required>
+      <option value="" disabled selected>Select Currency1</option>
+      {% for option in currency1_options %}
+      <option value="{{ option }}" {% if option == form.instance.currency1 %} selected {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="Invamtcreditnote">Invamtcreditnote:</label>
+    <input type="text" id="Invamtcreditnote" value="{{ form.Invamtcreditnote.value|default:''}}" name="Invamtcreditnote"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="standardrated">standardrated:</label>
+    <input type="text" id="standardrated" value="{{ form.standardrated.value|default:''}}" name="standardrated"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="GstPaid">GstPaid:</label>
+    <input type="text" id="GstPaid" value="{{ form.GstPaid.value|default:''}}" name="GstPaid"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="paymentstatus">paymentstatus:</label>
+
+    <select id="paymentstatus" name="paymentstatus" required>
+      <option value="" disabled selected>Select paymentstatus</option>
+      {% for option in paymentstatus_options %}
+      <option value="{{ option }}" {% if option == form.instance.paymentstatus %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+
+
+    <div class="row form-row">
+    <label for="newstatus">newstatus:</label>
+
+    <select id="newstatus" name="newstatus" required>
+      <option value="" disabled selected>Select newstatus</option>
+      {% for option in newstatus_options %}
+      <option value="{{ option }}" {% if option == form.instance.newstatus %} {% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="transactioncode">transactioncode:</label>
+    <input type="text" id="transactioncode" value="{{ form.transactioncode.value|default:''}}" name="transactioncode"
+      title="enter valid input">
+    </div>
+    <br>
+
+
+    <div class="row form-row">
+    <span class="container">
+      <span class="row">
+        <label for="date" class="col-1 col-form-label">areceiveddate</label>
+        <span class="col-5">
+          <span class="input-group">
+            <input type="text" class="form-control  dateclass" id="date"
+              value="{{ form.areceiveddate.value|default:''}}" name="areceiveddate" readonly>
+          </span>
+        </span>
+      </span>
+    </span>
+  </div>
+    <br>
+    <div class="row form-row">
+    <span class="container">
+      <span class="row">
+        <label for="date" class="col-1 col-form-label">a2ndpaymentReceiveddate</label>
+        <span class="col-5">
+          <span class="input-group">
+            <input type="text" class="form-control  dateclass" id="date"
+              value="{{ form.a2ndpaymentReceiveddate.value|default:''}}" name="a2ndpaymentReceiveddate" readonly>
+          </span>
+        </span>
+      </span>
+    </span>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="receivedamount">receivedamount:</label>
+    <input type="text" id="receivedamount" value="{{ form.receivedamount.value|default:''}}" name="receivedamount"
+      pattern="^(?:\d+(?:\.\d*)?|\. \d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="receivedamountCurrency">receivedamountCurrency:</label>
+
+    <select id="receivedamountCurrency" name="receivedamountCurrency">
+      <option value=""  selected>Select receivedamountCurrency</option>
+      <option value="USD" {% if form.receivedamountCurrency.value == 'USD' %} {% endif %}>USD</option>
+      <option value="INR" {% if form.receivedamountCurrency.value == 'INR' %} {% endif %}>INR</option>
+      <option value="SGD" {% if form.receivedamountCurrency.value == 'SGD' %} {% endif %}>SGD</option>
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="dc">dc:</label>
+    <input type="text" id="dc" value="{{ form.dc.value|default:''}}" name="dc" pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$"
+      title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="discountcurrency">discountcurrency:</label>
+
+
+    <select id="discountcurrency" name="discountcurrency">
+      <option value="" disabled selected>Select discountcurrency</option>
+      <option value="USD" {% if form.discountcurrency.value == 'USD' %} {% endif %}>USD</option>
+      <option value="INR" {% if form.discountcurrency.value == 'INR' %} {% endif %}>INR</option>
+      <option value="SGD" {% if form.discountcurrency.value == 'SGD' %} {% endif %}>SGD</option>
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="Invcurrency">Invcurrency:</label>
+
+    <select id="Invcurrency" name="Invcurrency" required>
+      <option value="" disabled selected>Select discountcurrency</option>
+      <option value="USD" {% if form.Invcurrency.value == 'USD' %} {% endif %}>USD</option>
+      <option value="INR" {% if form.Invcurrency.value == 'INR' %} {% endif %}>INR</option>
+      <option value="SGD" {% if form.Invcurrency.value == 'SGD' %} {% endif %}>SGD</option>
+    </select>
+  </div>
+    <br>
+    <div class="row form-row">
+    <label for="outstandingBalance">outstandingBalance:</label>
+    <input type="number" id="outstandingBalance" value="{{ form.outstandingBalance.value|default:''}}"
+      name="outstandingBalance" pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input"
+      oninput="validateInput(this)">
+    </div>
+    <br>
+    <div class="row form-row">
+    <label for="supt">supt:</label>
+    <input type="text" id="supt" value="{{ form.supt.value|default:''}}" name="supt"
+      pattern="^(?:\d+(?:\.\d*)?|\.\d+)?$|^$" title="enter valid input" oninput="validateInput(this)">
+    </div>
+    <br>
+
+
+    <input type="submit" value="AddDetails">
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    $(document).ready(function () {
+      flatpickr(".dateclass", {
+        dateFormat: "d-M-Y",
+        // Other options and configurations for Flatpickr can be added here
+      });
+    });
+    $(document).ready(function () {
+      $('#addform').submit(function (event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+
+        $.ajax({
+          url: $(this).attr('action'),
+          type: $(this).attr('method'),
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            window.history.back();
+          },
+          error: function (xhr, status, error) {
+            console.log(error);
+          }
+        });
+      });
+
+    });
+
+    function updateReceivedDate() {
+      var day = document.getElementById("day").value;
+      var month = document.getElementById("month").value;
+      var year = document.getElementById("year").value;
+
+      if (day !==  "" && month !==  "" && year !==  "") {
+        var receivedDate = day + "-" + month + "-" + year;
+        document.getElementById("areceiveddate").value = receivedDate;
+      }
+    }
+    function back() {
+      window.history.back();
+    }
+
+    function validateInput(element) {
+
+      if (element.id)
+        var regex = new RegExp(element.pattern);
+      if (!regex.test(element.value)) {
+        element.setCustomValidity(element.title);
+      } else {
+        element.setCustomValidity('');
+      }
+    }
+  </script>
+</body>
+
+</html>
